@@ -93,3 +93,5 @@ hs_err_pid*
 build/tmp/compileJava/
 src/main/resources/
 src/test/
+/.idea/
+/gradle/
