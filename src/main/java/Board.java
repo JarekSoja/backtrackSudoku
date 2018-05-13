@@ -78,16 +78,34 @@ public class Board extends Prototype {
         return result;
     }
 
-        public int getValueOfParticularCell ( int row, int column){
-            return this.getRows().get(row).getCellsInRow().get(column).getValue();
-        }
-
-        public Cell getParticularCell ( int row, int column){
-            return this.getRows().get(row).getCellsInRow().get(column);
-        }
-
-        public void setValueOfParticularCell ( int row, int column, int value){
-            this.getRows().get(row).getCellsInRow().get(column).setValue(value);
-        }
+    public int getValueOfParticularCell(int row, int column) {
+        return this.getRows().get(row).getCellsInRow().get(column).getValue();
     }
+
+    public Cell getParticularCell(int row, int column) {
+        return this.getRows().get(row).getCellsInRow().get(column);
+    }
+
+    public void setValueOfParticularCell(int row, int column, int value) {
+        this.getRows().get(row).getCellsInRow().get(column).setValue(value);
+    }
+
+
+    public Board deepCopy() throws CloneNotSupportedException {
+        Board clonedBoard = (Board) super.clone();
+        List<Row> clonedRows = new ArrayList<>();
+        for (Row r : rows) {
+            clonedRows.add(r);
+            for (Cell c : r.getCellsInRow()) {
+                r.getCellsInRow().add(c);
+            }
+        }
+        clonedBoard.setRows(clonedRows);
+        return clonedBoard;
+    }
+
+    public void setRows(List<Row> rows) {
+        this.rows = rows;
+    }
+}
 
