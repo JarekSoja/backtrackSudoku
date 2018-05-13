@@ -87,4 +87,3 @@ src/main/resources/
 src/test/
 /.idea/
 /gradle/
-!/.gitignore

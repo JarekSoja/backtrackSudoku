@@ -1,14 +1,10 @@
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 public class Cell {
 
-    private final static int EMPTY = -1;
+    private final static int EMPTY = 0;
 
     private int rowNumber;
     private int columnNumber;
@@ -30,5 +26,43 @@ public class Cell {
         this.columnNumber = columnNumber;
     }
 
+    public int getRowNumber() {
+        return rowNumber;
+    }
 
+    public void setRowNumber(int rowNumber) {
+        this.rowNumber = rowNumber;
+    }
+
+    public int getColumnNumber() {
+        return columnNumber;
+    }
+
+    public void setColumnNumber(int columnNumber) {
+        this.columnNumber = columnNumber;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public List<Integer> getPossibleValues() {
+        return possibleValues;
+    }
+
+    public void setPossibleValues(List<Integer> possibleValues) {
+        this.possibleValues = possibleValues;
+    }
+
+    public void removeOtherPossibleValues(int value) {
+        for (int i = 0; i < possibleValues.size(); i++) {
+            if (!possibleValues.get(i).equals(value)) {
+                possibleValues.remove(i);
+            }
+        }
+    }
 }
