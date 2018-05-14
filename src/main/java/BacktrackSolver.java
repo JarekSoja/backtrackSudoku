@@ -5,29 +5,27 @@ import java.util.stream.Collectors;
 public class BacktrackSolver {
 
     public boolean solve(Board board) {
-        fillCellsWithoutGuessing(board);
-        if (Board.isBoardSolved(board)) {
-            Commander.boardSolved();
-            return true;
-        } else {
-            Cell testedCell = board.getBoardInstance().returnFirstEmptyCell();
-            for (Integer value : testedCell.getPossibleValues()) {
-                try {
+        while (true) {
+            fillCellsWithoutGuessing(board);
+            if (Board.isBoardSolved(board)) {
+                Commander.boardSolved();
+                return true;
+            } else {
+                Cell testedCell = board.getBoardInstance().returnFirstEmptyCell();
+                for (Integer value : testedCell.getPossibleValues()) {
                     try {
-                        Board clonedBoard = board.deepCopy();
-                        testedCell.setValue(value);
-                        if (solve(clonedBoard)) {
-                            Commander.boardSolved();
-                            return true;
-                        } else {
-
-
+                        try {
+                            Board clonedBoard = board.deepCopy();
+                            testedCell.setValue(value);
+                            if (solve(clonedBoard)) {
+                                Commander.boardSolved();
+                                return true;
+                            }
+                        } catch (CloneNotSupportedException e) {
                         }
-
-                    } catch (CloneNotSupportedException e) {
+                        Commander.errorMessage();
+                    } catch (Exception e) {
                     }
-                    Commander.errorMessage();
-                } catch (Exception e) {
                 }
             }
         }
