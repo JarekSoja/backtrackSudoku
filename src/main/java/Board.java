@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class Board extends Prototype {
 
@@ -9,13 +8,20 @@ public class Board extends Prototype {
     final static int BOARD_MIN = 0;
     final static int BOARD_MAX = 8;
 
-    private List<Row> rows;
+    private List<Row> rows = new ArrayList<>();
+    private List<List<Cell>> columns;
+    private List<List<Cell>> sections;
+
 
     private Board() {
-        rows = new ArrayList<>();
         for (int i = BOARD_MIN; i <= BOARD_MAX; i++) {
             rows.add(new Row(i));
         }
+        columns = setColumns();
+        setSections();
+        sections = setSectionsOnceMore();
+        System.out.println(sections.size());
+
     }
 
     static Board getBoardInstance() {
@@ -63,7 +69,7 @@ public class Board extends Prototype {
         return rows;
     }
 
-    public List<List<Cell>> getColumns() {
+    public List<List<Cell>> setColumns() {
         List<List<Cell>> result = new ArrayList<>();
         for (int i = Board.BOARD_MIN; i <= Board.BOARD_MAX; i++) {
             List<Cell> column = new ArrayList<>();
@@ -71,20 +77,6 @@ public class Board extends Prototype {
                 column.add(getParticularCell(r.getRowNumber(), i));
             }
             result.add(column);
-        }
-        return result;
-    }
-
-    public List<List<Cell>> getSections() {
-        List<List<Cell>> result = new ArrayList<>();
-        int startingRow = 0;
-        int startingColumn = 0;
-        for (int i = startingRow * 3; i < startingRow * 3 + 3; i++) {
-            List<Cell> section = new ArrayList<>();
-            for (int j = startingColumn * 3; j < startingColumn * 3 + 3; j++) {
-                section.add(getParticularCell(i, j));
-            }
-            result.add(section);
         }
         return result;
     }
@@ -105,15 +97,14 @@ public class Board extends Prototype {
     public Board deepCopy() throws CloneNotSupportedException {
         Board clonedBoard = (Board) super.clone();
         List<Row> clonedRows = new ArrayList<>();
-        for (Row r : rows) {
-            clonedRows.add(r);
-            for (Cell c : r.getCellsInRow()) {
-                r.getCellsInRow().add(c);
-                for (Integer i : c.getPossibleValues()) {
-                    c.getPossibleValues().add(i);
+        for (int r = Board.BOARD_MIN; r <= Board.BOARD_MAX; r++) {
+            clonedRows.add(Board.getBoardInstance().rows.get(r));
+            for (int c = Board.BOARD_MIN; c <= Board.BOARD_MAX; c++) {
+                clonedRows.get(r).getCellsInRow().add(Board.getBoardInstance().getParticularCell(r, c));
+                List<Integer> clonedPossibleValues = Board.getBoardInstance().getParticularCell(r, c).getPossibleValues();
+                clonedRows.get(r).getCellsInRow().get(c).setPossibleValues(clonedPossibleValues);
                 }
             }
-        }
         clonedBoard.setRows(clonedRows);
         return clonedBoard;
     }
@@ -132,6 +123,96 @@ public class Board extends Prototype {
             }
         }
         return null;
+    }
+
+    public List<List<Cell>> getColumns() {
+        return columns;
+    }
+
+    public List<List<Cell>> getSections() {
+        return sections;
+    }
+
+    public void setSections() {
+        for (Row row : rows) {
+            int indexOfRow = rows.indexOf(row);
+            for (Cell cell : row.getCellsInRow()) {
+                int indexOfCell = row.getCellsInRow().indexOf(cell);
+                if (indexOfCell == 0 || indexOfCell == 1 || indexOfCell == 2) {
+                    switch (indexOfRow) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            cell.setSectionNumber(0);
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            cell.setSectionNumber(3);
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            cell.setSectionNumber(4);
+                            break;
+                    }
+                } else if ((indexOfCell == 3 || indexOfCell == 4 || indexOfCell == 5)) {
+                    switch (indexOfRow) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            cell.setSectionNumber(1);
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            cell.setSectionNumber(4);
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            cell.setSectionNumber(7);
+                            break;
+                    }
+                } else {
+                    switch (indexOfRow) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            cell.setSectionNumber(2);
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            cell.setSectionNumber(5);
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            cell.setSectionNumber(8);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    private List<List<Cell>> setSectionsOnceMore() {
+        List<List<Cell>> result = new ArrayList<>();
+        for (int i = BOARD_MIN; i <= BOARD_MAX; i++) {
+            List<Cell> section = new ArrayList<>();
+            for (int j = BOARD_MIN; j <= BOARD_MAX; j++) {
+                if (getParticularCell(i, j).getSectionNumber() == i) {
+                    section.add(getParticularCell(i, j));
+                }
+            }
+            result.add(section);
+        }
+        return result;
+    }
+
+    static void setBoardInstance(Board board) {
+        boardInstance = board;
     }
 }
 

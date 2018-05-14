@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cell {
 
@@ -8,6 +9,7 @@ public class Cell {
 
     private int rowNumber;
     private int columnNumber;
+    private int sectionNumber;
     private int value = EMPTY;
     private List<Integer> possibleValues = new ArrayList<Integer>() {{
         add(1);
@@ -60,11 +62,19 @@ public class Cell {
         this.possibleValues = possibleValues;
     }
 
-    public void removeOtherPossibleValues(int value) {
-        for (Integer i : possibleValues) {
-            if (i != value) {
-                possibleValues.remove(i);
-            }
-        }
+    void removeOtherPossibleValues(int value) {
+        List<Integer> possibleValuesAfterTesting = possibleValues.stream()
+                .filter(v -> v == value)
+                .collect(Collectors.toList());
+        possibleValues.clear();
+        possibleValues.addAll(possibleValuesAfterTesting);
+    }
+
+    void setSectionNumber(int number) {
+        sectionNumber = number;
+    }
+
+    public int getSectionNumber() {
+        return sectionNumber;
     }
 }

@@ -2,7 +2,6 @@ import java.util.Scanner;
 
 public class Processor {
 
-    private Board board = Board.getBoardInstance();
     private Scanner reader = new Scanner(System.in);
     private BacktrackSolver solver = new BacktrackSolver();
 
@@ -12,7 +11,7 @@ public class Processor {
             String input = reader.next();
             switch (input.toLowerCase()) {
                 case "sudoku":
-                    solveSudoku();
+                    solver.solve();
                     break;
                 case "n":
                     newGame();
@@ -33,20 +32,16 @@ public class Processor {
         }
     }
 
-    public void placeUserDigitOnBoard(int column, int row, int value) {
-        Cell parsedCell = board.getParticularCell(row - 1, column - 1);
+    private void placeUserDigitOnBoard(int column, int row, int value) {
+        Cell parsedCell = Board.getBoardInstance().getParticularCell(row - 1, column - 1);
         parsedCell.setValue(value);
     }
 
-    public void solveSudoku() {
-        System.out.println(board);
-    }
-
-    public void newGame() {
+    private void newGame() {
         //TODO New game
     }
 
-    public void exitGame() {
+    private void exitGame() {
         System.exit(1);
     }
 

@@ -21,4 +21,5 @@ public class Row {
     public List<Cell> getCellsInRow() {
         return cellsInRow;
     }
+
 }
