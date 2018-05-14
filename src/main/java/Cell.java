@@ -48,7 +48,9 @@ public class Cell {
 
     public void setValue(int value) {
         this.value = value;
+        removeOtherPossibleValues(value);
     }
+
 
     public List<Integer> getPossibleValues() {
         return possibleValues;
@@ -59,8 +61,8 @@ public class Cell {
     }
 
     public void removeOtherPossibleValues(int value) {
-        for (int i = 0; i < possibleValues.size(); i++) {
-            if (!possibleValues.get(i).equals(value)) {
+        for (Integer i : possibleValues) {
+            if (i != value) {
                 possibleValues.remove(i);
             }
         }

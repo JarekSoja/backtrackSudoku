@@ -23,7 +23,7 @@ public class Processor {
                     if (input.chars().allMatch(Character::isDigit)) {
                         if (input.length() == 3) {
                             char[] inputArr = input.toCharArray();
-                            placeUSerDigitOnBoard(Character.getNumericValue(inputArr[0]), Character.getNumericValue(inputArr[1]), Character.getNumericValue(inputArr[2]));
+                            placeUserDigitOnBoard(Character.getNumericValue(inputArr[0]), Character.getNumericValue(inputArr[1]), Character.getNumericValue(inputArr[2]));
                         } else {
                             Commander.errorMessage();
                         }
@@ -33,10 +33,9 @@ public class Processor {
         }
     }
 
-    public void placeUSerDigitOnBoard(int column, int row, int value) {
+    public void placeUserDigitOnBoard(int column, int row, int value) {
         Cell parsedCell = board.getParticularCell(row - 1, column - 1);
         parsedCell.setValue(value);
-        parsedCell.removeOtherPossibleValues(value);
     }
 
     public void solveSudoku() {

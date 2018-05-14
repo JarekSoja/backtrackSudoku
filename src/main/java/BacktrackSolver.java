@@ -4,8 +4,37 @@ import java.util.stream.Collectors;
 
 public class BacktrackSolver {
 
+    public boolean solve(Board board) {
+        fillCellsWithoutGuessing(board);
+        if (Board.isBoardSolved(board)) {
+            Commander.boardSolved();
+            return true;
+        } else {
+            Cell testedCell = board.getBoardInstance().returnFirstEmptyCell();
+            for (Integer value : testedCell.getPossibleValues()) {
+                try {
+                    try {
+                        Board clonedBoard = board.deepCopy();
+                        testedCell.setValue(value);
+                        if (solve(clonedBoard)) {
+                            Commander.boardSolved();
+                            return true;
+                        } else {
 
-    Board fillCellsWithoutGuessing(Board board) {
+
+                        }
+
+                    } catch (CloneNotSupportedException e) {
+                    }
+                    Commander.errorMessage();
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+
+    private void fillCellsWithoutGuessing(Board board) {
         boolean anythingFilled;
         do {
             anythingFilled = fillCellsWithOneSolution(board);
@@ -13,8 +42,6 @@ public class BacktrackSolver {
             anythingFilled = anythingFilled || solveColumns(board);
             anythingFilled = anythingFilled || solveSections(board);
         } while (anythingFilled);
-
-        return board;
     }
 
     private boolean fillCellsWithOneSolution(Board board) {

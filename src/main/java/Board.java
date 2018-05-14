@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Board extends Prototype {
 
     private static Board boardInstance = null;
 
-    public final static int BOARD_MIN = 0;
-    public final static int BOARD_MAX = 8;
+    final static int BOARD_MIN = 0;
+    final static int BOARD_MAX = 8;
 
     private List<Row> rows;
 
@@ -17,12 +18,22 @@ public class Board extends Prototype {
         }
     }
 
-    public static Board getBoardInstance() {
+    static Board getBoardInstance() {
         if (boardInstance == null) {
             boardInstance = new Board();
         }
         return boardInstance;
     }
+
+    static boolean isBoardSolved(Board board) {
+        long emptyCells = board.getRows().stream()
+                .flatMap(v -> v.getCellsInRow().stream())
+                .map(v -> v.getValue())
+                .filter(v -> v == 0)
+                .count();
+        return emptyCells == 0;
+    }
+
 
     @Override
     public String toString() {
@@ -98,6 +109,9 @@ public class Board extends Prototype {
             clonedRows.add(r);
             for (Cell c : r.getCellsInRow()) {
                 r.getCellsInRow().add(c);
+                for (Integer i : c.getPossibleValues()) {
+                    c.getPossibleValues().add(i);
+                }
             }
         }
         clonedBoard.setRows(clonedRows);
@@ -106,6 +120,18 @@ public class Board extends Prototype {
 
     public void setRows(List<Row> rows) {
         this.rows = rows;
+    }
+
+    Cell returnFirstEmptyCell() {
+        for (int i = Board.BOARD_MIN; i <= Board.BOARD_MAX; i++) {
+            for (int j = Board.BOARD_MIN; j <= Board.BOARD_MAX; j++) {
+                Cell testedCell = getParticularCell(i, j);
+                if (testedCell.getValue() == 0) {
+                    return testedCell;
+                }
+            }
+        }
+        return null;
     }
 }
 
