@@ -20,8 +20,6 @@ public class Board extends Prototype {
         columns = setColumns();
         setSections();
         sections = setSectionsOnceMore();
-        System.out.println(sections.size());
-
     }
 
     static Board getBoardInstance() {
@@ -96,16 +94,16 @@ public class Board extends Prototype {
 
     public Board deepCopy() throws CloneNotSupportedException {
         Board clonedBoard = (Board) super.clone();
-        List<Row> clonedRows = new ArrayList<>();
-        for (int r = Board.BOARD_MIN; r <= Board.BOARD_MAX; r++) {
-            clonedRows.add(Board.getBoardInstance().rows.get(r));
-            for (int c = Board.BOARD_MIN; c <= Board.BOARD_MAX; c++) {
-                clonedRows.get(r).getCellsInRow().add(Board.getBoardInstance().getParticularCell(r, c));
-                List<Integer> clonedPossibleValues = Board.getBoardInstance().getParticularCell(r, c).getPossibleValues();
-                clonedRows.get(r).getCellsInRow().get(c).setPossibleValues(clonedPossibleValues);
-                }
-            }
-        clonedBoard.setRows(clonedRows);
+//        List<Row> clonedRows = new ArrayList<>();
+//        for (int r = Board.BOARD_MIN; r <= Board.BOARD_MAX; r++) {
+//            clonedRows.add(Board.getBoardInstance().rows.get(r));
+//            for (int c = Board.BOARD_MIN; c <= Board.BOARD_MAX; c++) {
+//                clonedRows.get(r).getCellsInRow().add(Board.getBoardInstance().getParticularCell(r, c));
+//                List<Integer> clonedPossibleValues = Board.getBoardInstance().getParticularCell(r, c).getPossibleValues();
+//                clonedRows.get(r).getCellsInRow().get(c).setPossibleValues(clonedPossibleValues);
+//                }
+//            }
+//        clonedBoard.setRows(clonedRows);
         return clonedBoard;
     }
 
@@ -199,11 +197,13 @@ public class Board extends Prototype {
 
     private List<List<Cell>> setSectionsOnceMore() {
         List<List<Cell>> result = new ArrayList<>();
-        for (int i = BOARD_MIN; i <= BOARD_MAX; i++) {
+        for (int k = BOARD_MIN; k <= BOARD_MAX; k++) {
             List<Cell> section = new ArrayList<>();
             for (int j = BOARD_MIN; j <= BOARD_MAX; j++) {
-                if (getParticularCell(i, j).getSectionNumber() == i) {
-                    section.add(getParticularCell(i, j));
+                for (int i = BOARD_MIN; i <= BOARD_MAX; i++) {
+                    if (getParticularCell(i, j).getSectionNumber() == j) {
+                        section.add(getParticularCell(i, j));
+                    }
                 }
             }
             result.add(section);
